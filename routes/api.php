@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\API\BookController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -12,3 +13,5 @@ Route::get('/ping', function () {
         'message' => 'pong'
     ]);
 });
+
+Route::apiResource('books', BookController::class);
