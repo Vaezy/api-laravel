@@ -13,18 +13,29 @@ class BookSeeder extends Seeder
      */
     public function run(): void
     {
-        Book::create([
-            'title' => 'Titre 1',
-            'author' => 'Autheur 1',
-            'summary' => 'Sommaire numéro 1',
-            'isbn' => '9781234567890',
-        ]);
+        $books = [
+            [
+                "title" => "1984",
+                "author" => "George Orwell",
+                "summary" => "Roman dystopique décrivant une société totalitaire contrôlée par Big Brother.",
+                "isbn" => "9780451524935"
+            ],
+            [
+                "title" => "Dune",
+                "author" => "Frank Herbert",
+                "summary" => "Épopée de science-fiction centrée sur la planète Arrakis et les enjeux autour de l’épice.",
+                "isbn" => "9780441013593"
+            ],
+            [
+                "title" => "Le Seigneur des Anneaux",
+                "author" => "J.R.R. Tolkien",
+                "summary" => "Trilogie racontant la quête pour détruire l’Anneau unique et vaincre Sauron.",
+                "isbn" => "9780544003415"
+            ],
+        ];
 
-        Book::create([
-            'title' => 'Titre 2',
-            'author' => 'Autheur 2',
-            'summary' => 'Sommaire numéro 2',
-            'isbn' => '9781234567891',
-        ]);
+        foreach ($books as $book) {
+            Book::create($book);
+        }
     }
 }
