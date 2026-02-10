@@ -36,7 +36,7 @@ class BookController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Book $book)
     {
         return new BookResource($book);
     }
@@ -44,7 +44,7 @@ class BookController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Book $book)
     {
         $validated = $request->validate([
             'title' => 'sometimes|required|string|min:3|max:255',
@@ -60,7 +60,7 @@ class BookController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Book $book)
     {
         $book->delete();
         return response()->json(['message' => 'Book deleted successfully']);
