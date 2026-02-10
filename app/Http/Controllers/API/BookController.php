@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Resources\BookResource;
 use App\Models\Book;
+use Illuminate\Support\Facades\Cache;
 
 class BookController extends Controller
 {
@@ -14,7 +15,8 @@ class BookController extends Controller
      */
     public function index()
     {
-        return BookResource::collection(Book::all());
+        $books = Book::paginate(2);
+        return BookResource::collection($books);
     }
 
     /**
@@ -36,8 +38,11 @@ class BookController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Book $book)
+    public function show(string $id)
     {
+        $book = Cache::remember("book_$id", 60*60, function() use ($id) {
+            return Book::findOrFail($id);
+        });
         return new BookResource($book);
     }
 
