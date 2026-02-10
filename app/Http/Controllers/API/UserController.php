@@ -23,7 +23,12 @@ class UserController extends Controller
             'password' => Hash::make($validated['password']),
         ]);
 
-        return response()->noContent(201);
+        $token = $user->createToken('api-token')->plainTextToken;
+
+        return response()->json([
+            'user' => $user,
+            'token' => $token
+        ], 201);
     }
 
     public function login(Request $request)
@@ -44,6 +49,7 @@ class UserController extends Controller
         $token = $user->createToken('api-token')->plainTextToken;
 
         return response()->json([
+            'user' => $user,
             'token' => $token
         ]);
     }
