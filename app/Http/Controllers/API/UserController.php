@@ -6,9 +6,34 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use OpenApi\Attributes as OA;
+
+#[OA\Info(
+    title: "API-Laravel",
+    version: "1.0.0"
+)]
 
 class UserController extends Controller
 {
+    #[OA\Post(
+        path: "/api/register",
+        summary: "Inscrire un utilisateur",
+        requestBody: new OA\RequestBody(
+            required: true,
+            content: new OA\JsonContent(
+                required: ["name","email","password"],
+                properties: [
+                    new OA\Property(property: "name", type: "string", example: "Thomas"),
+                    new OA\Property(property: "email", type: "string", format: "email", example: "thomas@example.com"),
+                    new OA\Property(property: "password", type: "string", format: "password", example: "motdepasse123")
+                ]
+            )
+        ),
+        responses: [
+            new OA\Response(response: 201, description: "Utilisateur créé"),
+            new OA\Response(response: 422, description: "Erreur de validation")
+        ]
+    )]
     public function register(Request $request)
     {
         $validated = $request->validate([
@@ -31,6 +56,24 @@ class UserController extends Controller
         ], 201);
     }
 
+    #[OA\Post(
+        path: "/api/login",
+        summary: "Connexion d'un utilisateur",
+        requestBody: new OA\RequestBody(
+            required: true,
+            content: new OA\JsonContent(
+                required: ["email","password"],
+                properties: [
+                    new OA\Property(property: "email", type: "string", format: "email", example: "thomas@thomas.com"),
+                    new OA\Property(property: "password", type: "string", format: "password", example: "motdepasse123")
+                ]
+            )
+        ),
+        responses: [
+            new OA\Response(response: 200, description: "Connexion réussie"),
+            new OA\Response(response: 401, description: "Identifiants invalides")
+        ]
+    )]
     public function login(Request $request)
     {
         $validated = $request->validate([
@@ -54,6 +97,14 @@ class UserController extends Controller
         ]);
     }
 
+    #[OA\Post(
+        path: "/api/logout",
+        summary: "Déconnexion",
+        security: [["bearerAuth" => []]],
+        responses: [
+            new OA\Response(response: 204, description: "Utilisateur déconnecté")
+        ]
+    )]
     public function logout(Request $request)
     {
         $request->user()->currentAccessToken()->delete();
